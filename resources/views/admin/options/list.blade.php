@@ -1,0 +1,93 @@
+@extends('layouts.admin')
+
+@section('title')
+Options
+@endsection
+
+@section('content')
+    
+<div class="card-body">
+    <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Options</h1>
+            </div>
+            <div class="col-sm-6" style="text-align: right;">
+              <a href="{{route('dashboard.options.add')}}" class="btn btn-primary">Add Option</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      @csrf
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>option</th>
+            <th>Attribute</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($options as $option)
+            <tr>
+              <td>
+                @foreach($option->translations as $translation)
+                    <p>{{ $translation->name }}</p>
+                @endforeach
+            </td>
+            <td>{{ $option->attribute->name }}</td>
+            <td>
+                <a href="{{ route('dashboard.options.edit', ['id' => $option->id]) }}" class="btn btn-sm btn-primary">edit</a>
+                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal{{ $option->id }}">
+                    delete
+                </button>
+              </td>
+              <div class="modal fade" id="confirmDeleteModal{{ $option->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel{{ $option->id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmDeleteModalLabel{{ $option->id }}"> delete </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to delete {{$option->name}}? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                      <form action="{{ route('dashboard.options.destroy', ['id' => $option->id]) }}" method="POST" style="display: inline;">
+                          @csrf
+                          <button type="submit" class="btn btn-danger">delete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+@endsection

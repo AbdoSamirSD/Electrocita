@@ -6,7 +6,7 @@
           <div class="col-lg-6 text-center text-lg-right">
             <ul class="menu list-inline mb-0">
               <li class="list-inline-item"><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
-              <li class="list-inline-item"><a href="register.html">Register</a></li>
+              <li class="list-inline-item"><a href="{{route('register')}}">Register</a></li>
               <li class="list-inline-item"><a href="contact.html">Contact</a></li>
               <li class="list-inline-item"><a href="#">Recently viewed</a></li>
             </ul>
@@ -21,13 +21,20 @@
               <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-              <form action="customer-orders.html" method="post">
+              <form action="{{route('post.login')}}" method="post">
+                @csrf
                 <div class="form-group">
-                  <input id="email-modal" type="text" placeholder="email" class="form-control">
+                  <input name="email" id="email-modal" type="text" placeholder="email" class="form-control">
                 </div>
+                @error('email')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
                 <div class="form-group">
-                  <input id="password-modal" type="password" placeholder="password" class="form-control">
+                  <input name="password" id="password-modal" type="password" placeholder="password" class="form-control">
                 </div>
+                @error('password')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
                 <p class="text-center">
                   <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
                 </p>
@@ -51,7 +58,7 @@
         </div>
         <div id="navigation" class="collapse navbar-collapse">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
+            <li class="nav-item"><a href="{{route('index')}}" class="nav-link active">Home</a></li>
             <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="dropdown-toggle nav-link">Men<b class="caret"></b></a>
               <ul class="dropdown-menu megamenu">
                 <li>
